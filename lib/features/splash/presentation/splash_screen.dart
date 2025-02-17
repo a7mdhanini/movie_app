@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_movie_app/core/themes/app_colors.dart';
 import 'package:flutter_movie_app/core/utils/app_sizes.dart';
 import 'package:flutter_movie_app/core/utils/images/app_images.dart';
-import 'package:flutter_movie_app/core/widgets/my_background.dart';
 import 'package:flutter_movie_app/core/widgets/my_image.dart';
 import 'package:flutter_movie_app/core/widgets/texts/my_text.dart';
 import 'package:flutter_movie_app/features/app_navigation/presentation/app_navigation.dart';
@@ -35,48 +34,45 @@ class SplashScreen extends StatelessWidget {
                 percentage = state.timerPercentage;
               }
 
-              return MyBackground(
-                withBackground: false,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(),
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(),
 
-                      ///----App Logo
-                      MyImage(
-                        image: AppImages.logo,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
+                    ///----App Logo
+                    MyImage(
+                      image: AppImages.logo,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
 
-                      const Spacer(),
+                    const Spacer(),
 
-                      ///----Loading Indicator
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 50),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: LinearProgressIndicator(
-                            backgroundColor: AppColors.tertiary,
-                            value: percentage / 100,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                AppColors.primary),
-                          ),
+                    ///----Loading Indicator
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: LinearProgressIndicator(
+                          backgroundColor: AppColors.tertiary,
+                          value: percentage / 100,
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              AppColors.primary),
                         ),
                       ),
+                    ),
 
-                      const SizedBox(height: 15),
+                    const SizedBox(height: 15),
 
-                      ///----Percentage
-                      MyText(
-                        text: '$percentage%',
-                        color: AppColors.primary,
-                        type: TextType.medium,
-                      ),
+                    ///----Percentage
+                    MyText(
+                      text: '$percentage%',
+                      color: AppColors.primary,
+                      type: TextType.medium,
+                    ),
 
-                      SizedBox(height: Sizes.navBarHeight()),
-                    ],
-                  ),
+                    SizedBox(height: Sizes.navBarHeight()),
+                  ],
                 ),
               );
             },

@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 class DioClient {
   static final DioClient _dioClient = DioClient._internal();
 
-  String password = 'changeit';
+  String password = 'password';
   String? deviceId = "noID";
   late ByteData rootCACertificate;
   late ByteData clientCertificate;
@@ -23,7 +23,7 @@ class DioClient {
   DioClient._internal();
 
   Future<bool> initcert() async {
-    password = 'changeit';
+    password = 'password';
     deviceId = await getDeviceId();
     rootCACertificate = await rootBundle.load("assets/client.p12");
     clientCertificate = await rootBundle.load("assets/client.p12");

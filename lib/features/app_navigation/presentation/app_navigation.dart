@@ -1,9 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_movie_app/core/themes/app_colors.dart';
-import 'package:flutter_movie_app/features/discover/presentation/screens/discover_screen.dart';
-import 'package:flutter_movie_app/features/favorites/presentation/screens/favorites_screen.dart';
-import 'package:flutter_movie_app/features/top_rated/presentation/screens/top_rated_screen.dart';
+import 'package:flutter_movie_app/features/discover/presentation/screens/discover_view.dart';
+import 'package:flutter_movie_app/features/top_rated/presentation/screens/top_rated_view.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class AppNavigation extends StatefulWidget {
@@ -17,9 +16,9 @@ class _AppNavigationState extends State<AppNavigation> {
   int _selectedIndex = 1;
 
   static final List<Widget> _pages = [
-    const FavoritesScreen(),
     const DiscoverView(),
-    const TopRatedScreen(),
+    const DiscoverView(),
+    const TopRatedView(),
   ];
 
   @override

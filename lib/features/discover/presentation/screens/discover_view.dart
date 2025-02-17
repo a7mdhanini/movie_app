@@ -22,6 +22,10 @@ class DiscoverView extends StatelessWidget {
         },
         child: const Scaffold(
           backgroundColor: AppColors.darkBlue,
+
+          ///------------///
+          ///----Body----///
+          ///------------///
           body: DiscoverContent(),
         ),
       ),
