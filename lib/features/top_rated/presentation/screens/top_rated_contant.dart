@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_movie_app/features/discover/presentation/screens/show_movie_screen.dart';
-import 'package:flutter_movie_app/features/discover/presentation/widgets/movie_tv_item.dart';
 import 'package:flutter_movie_app/features/top_rated/bloc/top_rated_bloc.dart';
+import 'package:flutter_movie_app/features/top_rated/presentation/widgets/top_rated_item.dart';
 
 class TopRatedContant extends StatelessWidget {
   const TopRatedContant({super.key});
@@ -41,7 +41,7 @@ class TopRatedContant extends StatelessWidget {
                     return ListView.builder(
                       itemCount: bloc.moviesList.length,
                       itemBuilder: (context, index) {
-                        return MovieTvItem(
+                        return TopRatedItem(
                           overview: bloc.moviesList[index].overview,
                           posterPath: bloc.moviesList[index].posterPath,
                           title: bloc.moviesList[index].title,

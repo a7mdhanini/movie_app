@@ -1,12 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_movie_app/core/apis/api_base.dart';
 import 'package:flutter_movie_app/core/themes/app_colors.dart';
 import 'package:flutter_movie_app/core/utils/app_sizes.dart';
 import 'package:flutter_movie_app/core/widgets/my_app_bar.dart';
 import 'package:flutter_movie_app/core/widgets/my_image.dart';
+import 'package:flutter_movie_app/core/widgets/my_image_zoom.dart';
 import 'package:flutter_movie_app/core/widgets/texts/my_text.dart';
 import 'package:flutter_movie_app/features/discover/models/movies_model.dart';
 import 'package:flutter_movie_app/features/discover/models/tv_model.dart';
+import 'package:flutter_movie_app/features/discover/presentation/widgets/add_to_cart_container.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ShowMovieScreen extends StatelessWidget {
@@ -49,6 +53,16 @@ class ShowMovieScreen extends StatelessWidget {
           ),
         ]),
 
+        ///---------------------------------------///
+        ///----Bottom Navigation Favorite Rate----///
+        ///---------------------------------------///
+        bottomNavigationBar: FavoriteRateContainer(
+          onRatingUpdate: (newVal) {},
+          onTapFavorite: (newVal) {
+            log('Favorite: $newVal');
+          },
+        ),
+
         ///------------///
         ///----Body----///
         ///------------///
@@ -60,16 +74,32 @@ class ShowMovieScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ///----Image
-                  MyImage(
-                    width: Sizes.width,
-                    height: Sizes.height / 3,
-                    fit: BoxFit.cover,
-                    borderRadius: BorderRadius.circular(30),
-                    image: isMovie
-                        ? Environment.baseImageUrl +
-                            (model as MoviesModel).posterPath
-                        : Environment.baseImageUrl +
-                            (model as TvModel).posterPath,
+                  InkWell(
+                    onTap: () {
+                      Route route = MaterialPageRoute(
+                        builder: (context) => MyImageZoom(
+                          images: [
+                            isMovie
+                                ? Environment.baseImageUrl +
+                                    (model as MoviesModel).posterPath
+                                : Environment.baseImageUrl +
+                                    (model as TvModel).posterPath
+                          ],
+                        ),
+                      );
+                      Navigator.push(context, route);
+                    },
+                    child: MyImage(
+                      width: Sizes.width,
+                      height: Sizes.height / 3,
+                      fit: BoxFit.cover,
+                      borderRadius: BorderRadius.circular(30),
+                      image: isMovie
+                          ? Environment.baseImageUrl +
+                              (model as MoviesModel).posterPath
+                          : Environment.baseImageUrl +
+                              (model as TvModel).posterPath,
+                    ),
                   ),
 
                   Padding(
