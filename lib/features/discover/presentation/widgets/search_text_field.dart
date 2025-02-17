@@ -18,7 +18,7 @@ class SearchTextField extends StatelessWidget {
     return TextField(
       controller: searchController,
       onChanged: onChanged,
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.grey),

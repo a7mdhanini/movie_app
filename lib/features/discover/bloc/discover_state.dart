@@ -31,3 +31,7 @@ class TvShowsEmptyState extends DiscoverStateAbstract {}
 
 ///----Toggle State
 class ToggleMoviesTvState extends DiscoverStateAbstract {}
+
+class SearchMoviesState extends DiscoverStateAbstract {}
+
+class SearchTvState extends DiscoverStateAbstract {}

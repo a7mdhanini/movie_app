@@ -20,7 +20,7 @@ class DiscoverView extends StatelessWidget {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Scaffold(
+        child: const Scaffold(
           backgroundColor: AppColors.darkBlue,
           body: DiscoverContent(),
         ),

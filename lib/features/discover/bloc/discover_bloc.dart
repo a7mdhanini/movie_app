@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,13 @@ part 'discover_state.dart';
 class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
   final DiscoverRepository repository;
   final BuildContext context;
+  final TextEditingController searchController = TextEditingController();
 
   List<MoviesModel> moviesList = [];
   List<TvModel> tvList = [];
+
+  List<MoviesModel> filteredMoviesList = [];
+  List<TvModel> filteredTvList = [];
 
   bool isMoviesSelected = true;
 
@@ -22,6 +27,7 @@ class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
     on<MoviesLoadingEvent>(_onLoadMovies);
     on<TvShowsLoadingEvent>(_onLoadTvShows);
     on<ToggleMoviesTvEvent>(_onToggleMoviesTv);
+    on<SearchMoviesTvEvent>(_onSearchMoviesTv);
   }
 
   ///-------------------///
@@ -43,6 +49,7 @@ class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
           emit(MoviesEmptyState());
         } else {
           moviesList = success;
+          filteredMoviesList = success;
           emit(MoviesSuccessState());
         }
       },
@@ -68,6 +75,7 @@ class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
           emit(TvShowsEmptyState());
         } else {
           tvList = success;
+          filteredTvList = success;
           emit(TvShowsSuccessState());
         }
       },
@@ -87,5 +95,30 @@ class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
     } else {
       add(TvShowsLoadingEvent());
     }
+  }
+
+  ///------------------------///
+  ///----Search Movies Tv----///
+  ///------------------------///
+  FutureOr<void> _onSearchMoviesTv(
+      SearchMoviesTvEvent event, Emitter<DiscoverStateAbstract> emit) {
+    if (isMoviesSelected) {
+      filteredMoviesList = moviesList
+          .where((element) => element.title
+              .toLowerCase()
+              .contains(event.searchQuery.toLowerCase()))
+          .toList();
+      emit(SearchMoviesState());
+    } else {
+      filteredTvList = tvList
+          .where((element) => element.name
+              .toLowerCase()
+              .contains(event.searchQuery.toLowerCase()))
+          .toList();
+      emit(SearchTvState());
+    }
+
+    log('filteredMoviesList: $filteredMoviesList');
+    log('filteredTvList: $filteredTvList');
   }
 }

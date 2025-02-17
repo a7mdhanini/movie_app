@@ -6,9 +6,7 @@ import 'package:flutter_movie_app/features/discover/presentation/widgets/movie_t
 import 'package:flutter_movie_app/features/discover/presentation/widgets/search_text_field.dart';
 
 class DiscoverContent extends StatelessWidget {
-  DiscoverContent({super.key});
-
-  final TextEditingController _searchController = TextEditingController();
+  const DiscoverContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +23,10 @@ class DiscoverContent extends StatelessWidget {
             ///----Search Text Field
             SearchTextField(
               hintText: 'Search...',
-              onChanged: (newVal) {},
-              searchController: _searchController,
+              searchController: bloc.searchController,
+              onChanged: (newVal) {
+                bloc.add(SearchMoviesTvEvent(searchQuery: newVal));
+              },
             ),
 
             ///----Toggle Buttons
@@ -66,14 +66,15 @@ class DiscoverContent extends StatelessWidget {
                   }
 
                   ///----Movies Success
-                  if (state is MoviesSuccessState) {
+                  if (state is MoviesSuccessState ||
+                      state is SearchMoviesState) {
                     return ListView.builder(
-                      itemCount: bloc.moviesList.length,
+                      itemCount: bloc.filteredMoviesList.length,
                       itemBuilder: (context, index) {
                         return MovieTvItem(
-                          overview: bloc.moviesList[index].overview,
-                          posterPath: bloc.moviesList[index].posterPath,
-                          title: bloc.moviesList[index].title,
+                          overview: bloc.filteredMoviesList[index].overview,
+                          posterPath: bloc.filteredMoviesList[index].posterPath,
+                          title: bloc.filteredMoviesList[index].title,
                           onTap: () {
                             Navigator.push(
                               context,
@@ -88,14 +89,14 @@ class DiscoverContent extends StatelessWidget {
                   }
 
                   ///----Tv Success
-                  if (state is TvShowsSuccessState) {
+                  if (state is TvShowsSuccessState || state is SearchTvState) {
                     return ListView.builder(
-                      itemCount: bloc.tvList.length,
+                      itemCount: bloc.filteredTvList.length,
                       itemBuilder: (context, index) {
                         return MovieTvItem(
-                          overview: bloc.tvList[index].overview,
-                          posterPath: bloc.tvList[index].posterPath,
-                          title: bloc.tvList[index].name,
+                          overview: bloc.filteredTvList[index].overview,
+                          posterPath: bloc.filteredTvList[index].posterPath,
+                          title: bloc.filteredTvList[index].name,
                           onTap: () {
                             Navigator.push(
                               context,

@@ -11,3 +11,8 @@ class ToggleMoviesTvEvent extends DiscoverEventAbstract {
   final bool isMovies;
   ToggleMoviesTvEvent({required this.isMovies});
 }
+
+class SearchMoviesTvEvent extends DiscoverEventAbstract {
+  final String searchQuery;
+  SearchMoviesTvEvent({required this.searchQuery});
+}
