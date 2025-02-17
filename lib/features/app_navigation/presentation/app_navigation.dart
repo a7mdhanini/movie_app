@@ -16,7 +16,7 @@ class AppNavigation extends StatefulWidget {
 class _AppNavigationState extends State<AppNavigation> {
   int _selectedIndex = 1;
 
-  static const List<Widget> _pages = [
+  static List<Widget> _pages = [
     FavoritesScreen(),
     DiscoverScreen(),
     TopRatedScreen(),
@@ -39,9 +39,9 @@ class _AppNavigationState extends State<AppNavigation> {
         child: _pages[_selectedIndex],
       ),
 
-      ///--------------------///
-      ///----BottomNavBar----///
-      ///--------------------///
+      ///----------------------///
+      ///----Bottom Nav Bar----///
+      ///----------------------///
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: AppColors.background,

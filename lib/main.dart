@@ -1,7 +1,6 @@
 import 'package:flutter_movie_app/core/apis/dio_client.dart';
 import 'package:flutter_movie_app/core/config/package_info.dart';
 import 'package:flutter_movie_app/core/config/shared_db.dart';
-import 'package:flutter_movie_app/core/themes/themes/theme.dart';
 import 'package:flutter_movie_app/core/utils/app_sizes.dart';
 import 'package:flutter_movie_app/core/utils/bloc_observer.dart';
 import 'package:flutter_movie_app/features/splash/presentation/splash_screen.dart';
@@ -39,12 +38,10 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     Sizes.init(context);
-    return MaterialApp(
-      scrollBehavior: const ScrollBehavior(),
-      theme: lightMode,
-      darkTheme: darkMode,
+    return const MaterialApp(
+      scrollBehavior: ScrollBehavior(),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }

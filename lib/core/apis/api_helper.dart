@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter_movie_app/core/apis/api_base.dart';
 import 'package:flutter_movie_app/core/apis/dio_client.dart';
-import 'package:flutter_movie_app/core/constants/environment.dart';
-import 'package:flutter_movie_app/core/singletons/op_service.dart';
 import 'package:flutter_movie_app/core/apis/api_logger.dart';
 
 enum HttpMethod { get, post, delete }
@@ -50,7 +49,7 @@ class ApiHelper {
         headers: {
           'Accept': 'application/json; charset=UTF-8',
           'Content-type': 'application/json',
-          "Authorization": 'Bearer ${oPService.itoken}',
+          "Authorization": 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OTU3YjkxZmJiZjkzOTEwZmY0MDA2ZTY5Y2M0NWQyMCIsIm5iZiI6MTczOTcwMDAxNi4yMzEsInN1YiI6IjY3YjFiNzMwYmUxMTM1YzFkODZkYjRhYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.12rCVmL_Ftniw39QTlJqu6hCYxzaWmkBwrQjfB2dbAU',
           'Accept-Language': 'en',
         },
       );

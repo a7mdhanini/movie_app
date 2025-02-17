@@ -1,17 +1,10 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_movie_app/core/themes/app_colors.dart';
-import 'package:flutter_movie_app/core/utils/app_sizes.dart';
-import 'package:flutter_movie_app/core/utils/images/app_icons.dart';
-import 'package:flutter_movie_app/core/widgets/buttons/my_button.dart';
-import 'package:flutter_movie_app/core/widgets/card_container.dart';
-import 'package:flutter_movie_app/core/widgets/my_app_bar.dart';
-import 'package:flutter_movie_app/core/widgets/my_background.dart';
-import 'package:flutter_movie_app/features/cards/bloc/cards_bloc.dart';
-import 'package:flutter_movie_app/features/cards/models/card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_movie_app/features/cards/repository/card_repository.dart';
+import 'package:flutter_movie_app/features/discover/bloc/discover_bloc.dart';
+import 'package:flutter_movie_app/features/discover/presentation/screens/show_movie_screen.dart';
+import 'package:flutter_movie_app/features/discover/presentation/widgets/movie_tv_item.dart';
+import 'package:flutter_movie_app/features/discover/repository/discover_repository.dart';
 
 class DiscoverScreen extends StatelessWidget {
   const DiscoverScreen({super.key});
@@ -19,115 +12,198 @@ class DiscoverScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CardsBloc(context, repository: CardRepository())
-        ..add(CardsLoadingEvent()),
-      child: Scaffold(
-        ///---------------///
-        ///----App Bar----///
-        ///---------------///
-        appBar: myAppBar(context, title: 'Discover'),
+      create: (context) =>
+          DiscoverBloc(context, repository: DiscoverRepository())
 
-        ///------------///
-        ///----Body----///
-        ///------------///
-        body: BlocBuilder<CardsBloc, CardsStateAbstract>(
-          builder: (context, state) {
-            CardsBloc bloc = context.read<CardsBloc>();
-            if (state is CardsLoadingState) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state is CardsEmptyState) {
-              return const Center(child: Text('No Cards'));
-            }
-            if (state is CardsErrorState) {
-              return Center(
-                  child:
-                      Text('holy shit an error +${state.message.toString()}'));
-            } else {
-              return MyBackground(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: Sizes.width,
-                      height: Sizes.height / 3.5,
-                      child: CarouselSlider.builder(
-                        options: CarouselOptions(
-                          scrollPhysics: const BouncingScrollPhysics(),
-                          enableInfiniteScroll: false,
-                          enlargeCenterPage: true,
-                          initialPage: 0,
-                          enlargeFactor: 0.1,
-                          onPageChanged: (index, reason) {
-                            bloc.add(UpdateCardIndexEvent(index));
-                          },
-                        ),
-                        itemCount: bloc.cardsList.length,
-                        itemBuilder: (context, index, pageViewIndex) {
-                          final card = bloc.cardsList[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: CardContainer(
-                              width: Sizes.width,
-                              cardTypeName: card.cardType,
-                              cardNumber: card.cardNumber,
-                              cardExpirationDate: card.expirationDate,
-                              onTap: bloc.currentIndex == pageViewIndex
-                                  ? () {
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) =>
-                                      //         ShowCardScreen(card: card),
-                                      //   ),
-                                      // );
-                                    }
-                                  : null,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    // Add New Card Button
-                    DottedBorder(
-                      borderType: BorderType.RRect,
-                      radius: const Radius.circular(15),
-                      color: AppColors.tertiary,
-                      dashPattern: const [10],
-                      child: Container(
-                        width: Sizes.width / 1.1,
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: MyButton(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 70,
-                            vertical: 40,
-                          ),
-                          title: 'Add a new card',
-                          icon: AppIcons.plus2,
-                          borderColor: AppColors.tertiary,
-                          color: AppColors.lightGray.withOpacity(0.5),
-                          onPressed: () {
-                            // Show add card dialog/screen and handle the result
-                            // Example:
-                            final newCard = CardModel(
-                              id: 1,
-                              cardNumber: '**** **** **** 1234',
-                              cardType: 'VISA',
-                              expirationDate: '12/25',
-                            );
-                            bloc.add(AddNewCardEvent(newCard));
-                            // context.read<CardsBloc>().add(AddNewCard(newCard));
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+            ///----Load movies on init
+            ..add(MoviesLoadingEvent()),
+      child: const DiscoverView(),
+    );
+  }
+}
+
+class DiscoverView extends StatefulWidget {
+  const DiscoverView({super.key});
+
+  @override
+  DiscoverViewState createState() => DiscoverViewState();
+}
+
+class DiscoverViewState extends State<DiscoverView> {
+  bool isMoviesSelected = true;
+  final TextEditingController _searchController = TextEditingController();
+
+  void _toggleSelection(bool isMovies) {
+    setState(() {
+      isMoviesSelected = isMovies;
+      context.read<DiscoverBloc>().add(
+            isMovies ? MoviesLoadingEvent() : TvShowsLoadingEvent(),
+          );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.darkBlue,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ///----Search Text Field
+                SearchTextField(
+                  hintText: 'Search...',
+                  onChanged: (newVal) {},
+                  searchController: _searchController,
                 ),
-              );
-            }
-          },
+
+                ///----Toggle Buttons
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildToggleButton('Movies', isMoviesSelected,
+                          () => _toggleSelection(true)),
+                      const VerticalDivider(
+                          width: 20, thickness: 2, color: Colors.white),
+                      _buildToggleButton('TV Shows', !isMoviesSelected,
+                          () => _toggleSelection(false)),
+                    ],
+                  ),
+                ),
+
+                ///----Movie TV Show List
+                Expanded(
+                  child: BlocBuilder<DiscoverBloc, DiscoverStateAbstract>(
+                    builder: (context, state) {
+                      ///----Loading
+                      if (state is MoviesLoadingState ||
+                          state is TvShowsLoadingState) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      ///----Error
+                      if (state is MoviesErrorState ||
+                          state is TvShowsErrorState) {
+                        return Center(
+                          child: Text(
+                            'Error: ${state.toString()}',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }
+
+                      ///----Movies Success
+                      if (state is MoviesSuccessState) {
+                        return ListView.builder(
+                          itemCount: state.moviesList.length,
+                          itemBuilder: (context, index) {
+                            return MovieTvItem(
+                              overview: state.moviesList[index].overview,
+                              posterPath: state.moviesList[index].posterPath,
+                              title: state.moviesList[index].title,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const DetailsScreen(),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      }
+
+                      ///----Tv Success
+                      if (state is TvShowsSuccessState) {
+                        return ListView.builder(
+                          itemCount: state.tvShowsList.length,
+                          itemBuilder: (context, index) {
+                            return MovieTvItem(
+                              overview: state.tvShowsList[index].overview,
+                              posterPath: state.tvShowsList[index].posterPath,
+                              title: state.tvShowsList[index].name,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const DetailsScreen(),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      }
+
+                      ///----Empty
+                      return const Center(
+                        child: Text(
+                          'No results found',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildToggleButton(String text, bool isSelected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: isSelected ? Colors.yellow : Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
+class SearchTextField extends StatelessWidget {
+  final String? hintText;
+  final void Function(String)? onChanged;
+  final TextEditingController searchController;
+
+  const SearchTextField({
+    required this.searchController,
+    required this.hintText,
+    required this.onChanged,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: searchController,
+      onChanged: onChanged,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Colors.grey),
+        prefixIcon: const Icon(Icons.search, color: AppColors.primary),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
         ),
       ),
     );
