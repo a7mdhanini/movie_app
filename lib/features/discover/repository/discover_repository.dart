@@ -1,8 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_movie_app/core/apis/api_base.dart';
 import 'package:flutter_movie_app/core/apis/api_failure.dart';
 import 'package:flutter_movie_app/core/apis/api_helper.dart';
-import 'package:flutter_movie_app/features/cards/models/card_model.dart';
 import 'package:flutter_movie_app/features/discover/models/movies_model.dart';
 import 'package:flutter_movie_app/features/discover/models/tv_model.dart';
 

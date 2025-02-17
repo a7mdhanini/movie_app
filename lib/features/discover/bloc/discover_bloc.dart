@@ -11,8 +11,10 @@ part 'discover_state.dart';
 class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
   final DiscoverRepository repository;
   final BuildContext context;
+
   List<MoviesModel> moviesList = [];
   List<TvModel> tvList = [];
+
   bool isMoviesSelected = true;
 
   DiscoverBloc(this.context, {required this.repository})
@@ -41,7 +43,7 @@ class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
           emit(MoviesEmptyState());
         } else {
           moviesList = success;
-          emit(MoviesSuccessState(moviesList: moviesList));
+          emit(MoviesSuccessState());
         }
       },
     );
@@ -66,7 +68,7 @@ class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
           emit(TvShowsEmptyState());
         } else {
           tvList = success;
-          emit(TvShowsSuccessState(tvShowsList: tvList));
+          emit(TvShowsSuccessState());
         }
       },
     );
@@ -78,7 +80,7 @@ class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
   void _onToggleMoviesTv(
       ToggleMoviesTvEvent event, Emitter<DiscoverStateAbstract> emit) {
     isMoviesSelected = event.isMovies;
-    emit(ToggleMoviesTvState(isMovies: isMoviesSelected));
+    emit(ToggleMoviesTvState());
 
     if (isMoviesSelected) {
       add(MoviesLoadingEvent());
@@ -86,6 +88,4 @@ class DiscoverBloc extends Bloc<DiscoverEventAbstract, DiscoverStateAbstract> {
       add(TvShowsLoadingEvent());
     }
   }
-
-  
 }

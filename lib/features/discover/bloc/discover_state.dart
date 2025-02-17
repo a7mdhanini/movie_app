@@ -8,10 +8,7 @@ class MoviesInitialState extends DiscoverStateAbstract {}
 
 class MoviesLoadingState extends DiscoverStateAbstract {}
 
-class MoviesSuccessState extends DiscoverStateAbstract {
-  final List<MoviesModel> moviesList;
-  MoviesSuccessState({required this.moviesList});
-}
+class MoviesSuccessState extends DiscoverStateAbstract {}
 
 class MoviesErrorState extends DiscoverStateAbstract {
   final String message;
@@ -23,10 +20,7 @@ class MoviesEmptyState extends DiscoverStateAbstract {}
 ///----TV Shows States
 class TvShowsLoadingState extends DiscoverStateAbstract {}
 
-class TvShowsSuccessState extends DiscoverStateAbstract {
-  final List<TvModel> tvShowsList;
-  TvShowsSuccessState({required this.tvShowsList});
-}
+class TvShowsSuccessState extends DiscoverStateAbstract {}
 
 class TvShowsErrorState extends DiscoverStateAbstract {
   final String message;
@@ -36,7 +30,4 @@ class TvShowsErrorState extends DiscoverStateAbstract {
 class TvShowsEmptyState extends DiscoverStateAbstract {}
 
 ///----Toggle State
-class ToggleMoviesTvState extends DiscoverStateAbstract {
-  final bool isMovies;
-  ToggleMoviesTvState({required this.isMovies});
-}
+class ToggleMoviesTvState extends DiscoverStateAbstract {}

@@ -16,10 +16,10 @@ class AppNavigation extends StatefulWidget {
 class _AppNavigationState extends State<AppNavigation> {
   int _selectedIndex = 1;
 
-  static List<Widget> _pages = [
-    FavoritesScreen(),
-    DiscoverScreen(),
-    TopRatedScreen(),
+  static final List<Widget> _pages = [
+    const FavoritesScreen(),
+    const DiscoverView(),
+    const TopRatedScreen(),
   ];
 
   @override
