@@ -49,7 +49,8 @@ class ApiHelper {
         headers: {
           'Accept': 'application/json; charset=UTF-8',
           'Content-type': 'application/json',
-          "Authorization": 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OTU3YjkxZmJiZjkzOTEwZmY0MDA2ZTY5Y2M0NWQyMCIsIm5iZiI6MTczOTcwMDAxNi4yMzEsInN1YiI6IjY3YjFiNzMwYmUxMTM1YzFkODZkYjRhYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.12rCVmL_Ftniw39QTlJqu6hCYxzaWmkBwrQjfB2dbAU',
+          "Authorization":
+              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OTU3YjkxZmJiZjkzOTEwZmY0MDA2ZTY5Y2M0NWQyMCIsIm5iZiI6MTczOTcwMDAxNi4yMzEsInN1YiI6IjY3YjFiNzMwYmUxMTM1YzFkODZkYjRhYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.12rCVmL_Ftniw39QTlJqu6hCYxzaWmkBwrQjfB2dbAU',
           'Accept-Language': 'en',
         },
       );
