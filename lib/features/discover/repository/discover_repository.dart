@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_movie_app/core/apis/api_failure.dart';
 import 'package:flutter_movie_app/core/apis/api_helper.dart';
+import 'package:flutter_movie_app/core/apis/api_paths.dart';
 import 'package:flutter_movie_app/features/discover/models/movies_model.dart';
 import 'package:flutter_movie_app/features/discover/models/tv_model.dart';
 
@@ -9,8 +10,7 @@ class DiscoverRepository {
   ///----Get Movies----///
   ///------------------///
   Future<Either<Failure, List<MoviesModel>>> getMovies() async {
-    String url =
-        'discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc';
+    String url = ApiPaths.moviesApi;
 
     List<MoviesModel> movies = [];
     Either<Failure, List<MoviesModel>> result = left(Failure('Unknown error'));
@@ -36,8 +36,7 @@ class DiscoverRepository {
   ///----Get Tv Shows----///
   ///--------------------///
   Future<Either<Failure, List<TvModel>>> getTvShows() async {
-    String url =
-        'discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc';
+    String url = ApiPaths.tvApi;
 
     List<TvModel> movies = [];
     Either<Failure, List<TvModel>> result = left(Failure('Unknown error'));
